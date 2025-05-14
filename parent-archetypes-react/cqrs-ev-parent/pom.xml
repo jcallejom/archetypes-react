@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>archetypes-react-parent</artifactId>
+    <groupId>com.archetype</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.archetype.architectural</groupId>
+  <artifactId>cqrs-ev-parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>${project.artifactId}</name>
+  
+   <properties>  
+		<cqrsev-core-lib-version>1.0.0-SNAPSHOT</cqrsev-core-lib-version>
+   </properties>
+	 
+  <dependencyManagement>
+	<dependencies>
+	
+		<dependency>
+			<groupId>com.archetype.cqrs.core</groupId>
+			<artifactId>cqrsev-core-lib</artifactId>
+			<version>${cqrsev-core-lib-version}</version>
+		</dependency>		 
+        <!-- Java agente opentelemetry springboot-->  
+         
+             <dependency>
+                <groupId>io.opentelemetry.instrumentation</groupId>
+                <artifactId>opentelemetry-instrumentation-bom</artifactId>
+                <version>2.8.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+             <!-- Java agente opentelemetry springboot--> 	
+	</dependencies>
+  </dependencyManagement>
+  
+<dependencies>
+   <!-- Java agente opentelemetry --> 
+           <dependency>
+            <groupId>io.opentelemetry.javaagent</groupId>
+            <artifactId>opentelemetry-javaagent</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+   <!-- opentelemetry springboot-->       
+        <dependency>
+          <groupId>io.opentelemetry.instrumentation</groupId>
+          <artifactId>opentelemetry-spring-boot-starter</artifactId>
+        </dependency>
+            <dependency>
+                <groupId>io.opentelemetry.contrib</groupId>
+                <artifactId>opentelemetry-samplers</artifactId>
+                <version>1.40.0-alpha</version>
+            </dependency>
+     <!-- Dependencias de jaeger cloud OpenTelemetry With OTLP spring 3.0.x-->
+     <!-- bridges the Micrometer Observation API to OpenTelemetry.-->
+       <dependency>
+         <groupId>io.micrometer</groupId>
+         <artifactId>micrometer-tracing-bridge-otel</artifactId>
+      </dependency> 
+      <!-- reports traces to a collector that can accept OTLP.-->
+      <dependency>
+         <groupId>io.opentelemetry</groupId>
+         <artifactId>opentelemetry-exporter-otlp</artifactId>
+      </dependency>            
+               <!-- prometheus  con ottel   -->    
+        <dependency>
+             <groupId>io.micrometer</groupId>
+             <artifactId>micrometer-registry-otlp</artifactId>
+        </dependency>
+        
+                    <!-- prometheus deberia quitarse auqne no son excluyentes   -->     
+        <dependency>
+             <groupId>io.micrometer</groupId>
+             <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>    		
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>org.springdoc</groupId>
+		    <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.archetype.cqrs.core</groupId>
+			<artifactId>cqrsev-core-lib</artifactId>
+		</dependency>			
+</dependencies>    
+   
+</project>

@@ -1,0 +1,406 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.archetype</groupId>
+  <artifactId>parent-archetypes-react</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>${project.artifactId}</name>
+
+
+  <description>POM parent project for all  projects</description>  
+  
+  <properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+		<java.version>21</java.version>
+		<spring-boot.version>3.2.5</spring-boot.version>
+        <r2dbc-postgresql.version>1.0.5.RELEASE</r2dbc-postgresql.version>
+ 		<oracle-r2dbc.version>1.1.1</oracle-r2dbc.version>
+		<oracle.version>21.9.0.0</oracle.version><!--solo para opentelemetry para pl-->
+		<r2dbc-mysql.version>1.0.6</r2dbc-mysql.version>
+		<mongodb-once.version>3.2.5</mongodb-once.version>
+		<r2dbc-h2.version>1.0.0.RELEASE</r2dbc-h2.version>
+		<kafka-once.version>3.2.4</kafka-once.version>
+		<reactor-test-version>3.3.5.RELEASE</reactor-test-version>
+        <dockerfile-maven-version>1.4.13</dockerfile-maven-version>
+		<lombok.version>1.18.32</lombok.version>
+		<mapstruct.version>1.5.3.Final</mapstruct.version>
+		<karate.junit5>1.4.1</karate.junit5>
+		<karate.version>0.9.6</karate.version>
+		<validation.version>3.1.0-M2</validation.version>
+		<swagger-v3-openapi.version>2.6.0</swagger-v3-openapi.version>
+        <!-- Necesariar para que convivan plugins surfire y jacoco-->
+	</properties>   
+  
+  <dependencyManagement>
+		<dependencies>
+			
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			
+			
+		<!-- kafka-->			
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<version>${spring-boot.version}</version>
+		</dependency>
+		<!-- kafka streams	
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-binder-kafka</artifactId>
+		</dependency>
+		-->
+		
+		<!-- react		              
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>-->
+
+		<!-- data acces-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-r2dbc</artifactId>
+			<version>${spring-boot.version}</version>
+		</dependency>
+	 <!-- relational database resources-->	
+      <dependency>
+        <groupId>io.asyncer</groupId>
+        <artifactId>r2dbc-mysql</artifactId>
+        <version>${r2dbc-mysql.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>r2dbc-postgresql</artifactId>
+        <version>${r2dbc-postgresql.version}</version>
+      </dependency>	
+     <dependency>
+        <groupId>com.oracle.database.r2dbc</groupId>
+        <artifactId>oracle-r2dbc</artifactId>
+        <version>${oracle-r2dbc.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mariadb</groupId>
+        <artifactId>r2dbc-mariadb</artifactId>
+        <version>${r2dbc-mariadb.version}</version>
+      </dependency>
+ 	<!-- no-relational database resources-->
+	<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+    </dependency>
+	    <!-- memory database resources-->
+
+      <dependency>
+        <groupId>io.r2dbc</groupId>
+        <artifactId>r2dbc-h2</artifactId>
+        <version>${r2dbc-h2.version}</version>
+      </dependency>
+      
+      	    
+	 <!--add components  -->      
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.mapstruct</groupId>
+		    <artifactId>mapstruct</artifactId>
+		    <version>${mapstruct.version}</version>
+		</dependency>	
+		<!--open api resources  -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <version>${swagger-v3-openapi.version}</version>
+        </dependency>		      		
+		
+
+		<!--test dependencies-->
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
+			<version>${reactor-test-version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- se baja con kafka requiere impir de springcloud import
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-test-support</artifactId>
+			<scope>test</scope>
+		</dependency>
+		-->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<version>${spring-boot.version}</version>
+			<scope>test</scope>
+		</dependency>
+	
+	    <!-- karate dependencies-->
+		<dependency>
+		    <groupId>com.intuit.karate</groupId>
+			<artifactId>karate-junit5</artifactId>
+			 <version>${karate.junit5}</version>
+			 <scope>test</scope>
+		</dependency>
+		<dependency>
+		  <groupId>com.intuit.karate</groupId>
+		   <artifactId>karate-apache</artifactId>
+		   <version>${karate.version}</version>
+		   <scope>test</scope>
+		</dependency>
+	</dependencies>
+  </dependencyManagement>
+  <dependencies>
+        <!--Gives us the ability to quickly setup and run services
+        Property Defaults,Automatic Restart,Live Reload,Global Settings,Remote Applications for debug example via http--> 	
+      
+		<!-- react-->		              
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		
+        <!-- Spring Boot Starter y nos permiten que cada vez que realicemos un cambio en el servidor
+         la aplicación se actualize y reinicie sola de forma totalmente transparente 
+        Sin embargo crea problemas ENMASCARANDO ERRORES con la cache asi que lo quitamos de momento
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>-->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+ 	
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+         </dependency>
+  		<!-- prometheus    
+      	<dependency>
+		  	 <groupId>io.micrometer</groupId>
+		 	 <artifactId>micrometer-registry-prometheus</artifactId>
+	  	</dependency>   -->                               
+       <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <!--If want exclude junit4 and use only junit5-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+	
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	    <!-- karate dependencies-->
+		<dependency>
+		    <groupId>com.intuit.karate</groupId>
+			<artifactId>karate-junit5</artifactId>
+			 <scope>test</scope>
+		</dependency>
+		<dependency>
+		  <groupId>com.intuit.karate</groupId>
+		   <artifactId>karate-apache</artifactId>
+		   <scope>test</scope>
+		</dependency>
+		<!-- mappings dependencies-->   
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+			</dependency>
+			<dependency>
+			    <groupId>org.mapstruct</groupId>
+			    <artifactId>mapstruct</artifactId>
+			</dependency>		              
+    </dependencies> 
+         
+    <build>
+        <plugins>
+		   <plugin>
+			    <groupId>org.jacoco</groupId>
+			    <artifactId>jacoco-maven-plugin</artifactId>
+			    <version>0.8.12</version>
+			    <executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+						 	<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+                <configuration>
+                                    
+                </configuration>
+            </plugin>
+            <!--This plugin generate reports in two differents forma .txt and xml 
+            in test phase when build life cicle is execuite-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.2</version>
+                <configuration>
+                    <useSystemClassLoader>@{argLine} false</useSystemClassLoader>
+                    <argLine>@{argLine} -Djava.security.egd=file:/dev/./urandom</argLine>
+                </configuration>
+            </plugin>
+            <!--It is the spring-boot repackage goal that repackages the JAR produced 
+            by maven to specify the main class and make it executable using an embedded container-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>     
+                <version>${spring-boot.version}</version>      
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>  
+            <!--generate docker container en package goal 
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${dockerfile-maven-version}</version>                               
+                <executions>
+                    <execution>                        
+                        <id>build-docker-image</id>
+                        <phase>package</phase>
+                        <goals>                                              
+                            <goal>build</goal>
+                           <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>                       
+                    <repository>${project.groupId}/microservice-docker-${project.artifactId}</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin> 
+             
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <!-- <version>3.9.1</version>-->
+                 <version>4.0.0-M16</version>
+                <configuration>
+                    <locales>en,fr,es</locales>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <!-- <version>3.2.0</version>-->   
+                <configuration>                   
+                </configuration> 
+            </plugin>
+            <!--generate project code documentation-->
+          <!--  <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <additionalparam>${javadoc.opts}</additionalparam>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
+               <!--generate maven site documentation-->
+          <!--  <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.9.1</version>    
+                <configuration>
+                    <locales>es,es</locales>
+                </configuration>    
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <additionalparam>${javadoc.opts}</additionalparam>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
+           	<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                    <!-- generate mappers -->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                       <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                       </path> 
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin> 	
+        </plugins>
+    </build>
+    <modules>
+	<!-- -->	
+		<module>api-composite-react-parent</module>
+		<!-- <module>cqrs-ev-parent</module>-->
+    </modules>
+
+</project>
