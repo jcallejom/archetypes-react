@@ -1,0 +1,42 @@
+
+spring.cloud.stream:
+  function:
+    definition: supplier;consumer
+    #definition: sink;flux
+  bindings:
+    supplier-out-0:
+      destination: order-created
+    consumer-in-0:
+      destination: order-updated
+---
+spring:
+  r2dbc:
+    #url: r2dbc:postgresql://localhost:3432/re2dbc_db
+    url: r2dbc:h2:mem:///fluxr2dbc
+    username: admin
+    password: adminpw
+    
+  #jpa:
+ #   defer-datasource-initialization: true
+  #  show-sql: true
+   # hibernate:
+   #   ddl-auto: update
+   # database-platform: org.hibernate.dialect.H2Dialect
+  #datasource:
+   #     url: r2dbc:h2:mem:fluxr2dbc
+   #     username: admin
+   #     password: adminpw
+   #     driver-class-name: org.h2.Driver
+  h2:
+   console:
+     enabled: true
+     #path: /h2-console
+     #port: 8089
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    path: /swagger-ui # swagger custom path
+    enabled: true  # Disabling the swagger-ui production enviroments always false
+  api-docs:
+    groups:
+      enabled: true

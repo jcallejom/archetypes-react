@@ -1,0 +1,152 @@
+version: "3.8"
+
+services:
+  postgres_db:
+      container_name: postgresdb
+      restart: always
+      image: postgres:latest
+      ports:
+          - 3432:5432
+      volumes:
+          #allow *.sql, *.sql.gz, or *.sh and is execute only if data directory is empty
+          - ./dbfiles:/docker-entrypoint-initdb.d
+          - ./../postgres_data:/var/lib/pgsql/data/pgdata
+          #- ./../postgres_data:/var/lib/postgresql/data        
+          #- /var/lib/postgres_data:/var/lib/postgresql/data
+      environment:
+          #default postgres super user
+          POSTGRES_USER: postgres
+           #default passwor for postgres super user, it is only the required envvar for postgres image
+          POSTGRES_PASSWORD: postgrespw
+          #main database if name is not specific thname of super user is use
+          POSTGRES_DB: re2dbc_db
+
+#database admin service
+  mongo-express:
+    image: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      - ME_CONFIG_MONGODB_AUTH_USERNAME=admin
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD=adminpw
+      - ME_CONFIG_BASICAUTH_USERNAME=expresslogin
+      - ME_CONFIG_BASICAUTH_PASSWORD=expresspw
+      #- ME_CONFIG_MONGODB_URL= mongodb://admin:adminpw@mongodb:27017/
+      #- ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
+    depends_on:
+      - mongodb
+    ports:
+        - "8899:8081"
+
+##########################################################################     
+#dbeaver service
+##########################################################################       
+  dbeaver:
+    image: dbeaver/cloudbeaver
+    restart: always
+    ports:
+      - 8978:8978
+    volumes: 
+      - ./../cloudbeaver_data:/opt/cloudbeaver/workspace  
+    depends_on:
+      - postgres_db
+      - mysqldb
+#############
+#### mysql service
+#############
+  mysqldb:
+    image: mysql:latest
+    container_name: mysqldb
+    restart: always
+    environment:
+        - MYSQL_DATABASE=productos
+        - MYSQL_USER=mysqluser
+        - MYSQL_PASSWORD=mysqlpw 
+        - MYSQL_ROOT_PASSWORD=mysqlpw 
+    #: 
+     # mysql.env
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+#########
+##### mongo-service
+########
+  mongodb:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpw
+        #MONGO_INITDB_DATABASE: documents
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+##########
+####
+############
+  kafka:
+    image: apache/kafka-native
+    ports:
+      - "9092:9092"
+    environment:
+      # Configure listeners for both docker and host communication
+      KAFKA_LISTENERS: CONTROLLER://localhost:9091,HOST://0.0.0.0:9092,DOCKER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: HOST://localhost:9092,DOCKER://kafka:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,DOCKER:PLAINTEXT,HOST:PLAINTEXT
+ 
+      # Settings required for KRaft mode
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9091
+ 
+      # Listener to use for broker-to-broker communication
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER
+ 
+      # Required for a single node cluster
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+ 
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    depends_on:
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9093
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+####
+###
+###
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 9000:9000
+      - 9443:9443
+      - 8000:8000 # Optional, for Edge Agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./../portainer_data:/data     
+volumes:
+  postgres_data:
+    driver: local
+  mysql-data:
+    driver: local
+  mongodb_data:
+    driver: local
+  cloudbeaver_data:
+    driver: local
+  portainer_data:
+    driver: local 

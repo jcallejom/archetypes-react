@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 
+    <parent>
+		<groupId>com.archetype.architectural</groupId>
+		<artifactId>saga-orchestration-archetype</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>-->
+    
+        <parent>
+          <groupId>com.archetype</groupId>
+          <artifactId>parent-archetypes-react</artifactId>
+          <version>1.0.0-SNAPSHOT</version>
+        </parent>    
+        
+    <groupId>com.archetype.architectural</groupId>
+    <artifactId>common-rvo</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+        <lombok.version>1.18.32</lombok.version>
+    </properties>
+    
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<optional>true</optional>
+		</dependency>
+		 <dependency>
+           <groupId>com.archetype.base.core</groupId>
+           <artifactId>base-core-lib-react</artifactId>
+           <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+	</dependencies>
+</project>

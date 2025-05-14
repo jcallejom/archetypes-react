@@ -1,0 +1,116 @@
+{
+  "version": 3,
+  "name": "second",
+  "port": 8090,
+  "debug_endpoint": true,  
+  "@comment": "At this second stage of the implementation,we implement route with Authorization header but we still need to send to valid auth2 to the backend.",
+  "extra_config": {
+    "telemetry/logging": {
+      "level": "DEBUG",
+      "prefix": "[KRAKEND]",
+      "syslog": false,
+      "stdout": true
+    }
+  },
+  "endpoints": [
+    {
+      "endpoint": "/public",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/public",
+          "encoding": "json",
+          "method": "GET",
+          "host": ["http://sample-service:9080"]
+        }
+      ]
+    },
+    {
+      "endpoint": "/private",
+      "method": "GET",
+      "output_encoding": "json",
+      
+      "backend": [
+        {
+          "url_pattern": "/api/private",
+          "encoding": "json",
+          "method": "GET",
+          "host": ["http://sample-service:9080"]
+        }
+      ],
+      "input_headers": ["Authorization"]
+    },
+    {
+      "endpoint": "/privateno-sec/{principal}/{name}",
+      "method": "GET",
+      "output_encoding": "json",
+      "@comment": " call second service no-sec two params.",
+      "backend": [
+        {
+          "url_pattern": "/api/private/{principal}/{name}",
+          "encoding": "json",
+          "method": "GET",
+          "host": ["http://sample-nosec-service:9081"]
+        }
+      ]
+    },    
+    {
+      "endpoint": "/roles-adapter",
+      "method": "GET",
+      "output_encoding": "json",
+      "timeout": "3000ms",
+      "backend": [
+        {
+          "url_pattern": "/roles",
+          "timeout": "3000ms",
+          "encoding": "json",
+          "method": "GET",
+          "host": ["http://keycloack-adapter:8092"]
+        }
+      ],
+      "input_headers": ["Authorization"]
+    },
+    {
+      "endpoint": "/login-adapter",
+      "method": "POST",
+      "output_encoding": "json",
+      "input_headers": [ "Content-Type" ],
+      "content_type": "application/x-www-form-urlencoded",  
+      "backend": [
+        {
+          "url_pattern": "/login",
+          "encoding": "json",
+          "method": "POST",
+          "host": ["http://keycloack-adapter:8092"]
+        }
+      ]
+    },     
+    {
+    "endpoint": "/keycloak-healt",
+    "backend": [
+        {
+          "host":["http://keycloak_web:8080"],
+          "url_pattern": "/health/ready"
+        }
+        ]
+    }, 
+    {
+      "endpoint": "/keycloak-login",
+      "method": "POST",
+      "output_encoding": "json",
+      "input_headers": [ "Content-Type" ],
+      "content_type": "application/x-www-form-urlencoded",  
+      
+      "backend": [
+         {
+          "url_pattern": "/realms/company-services/protocol/openid-connect/token",
+          "encoding": "json",    
+          "method": "POST",
+          "host": ["http://keycloak_web:8080"]
+         }
+       ]
+     }
+     
+  ]
+}

@@ -1,0 +1,76 @@
+version: "3.8"
+
+services:
+    zookeeper:
+      image: quay.io/debezium/zookeeper:3.0.8.Final
+      #image: quay.io/debezium/zookeeper:1.9
+      container_name: zookeeper
+      ports:
+        - 2181:2181
+        - 2888:2888
+        - 3888:3888
+      networks:
+        - kraken-net 
+    kafka:
+      image: quay.io/debezium/kafka:3.0.8.Final
+      #image: quay.io/debezium/kafka:1.9
+      container_name: kafka
+      ports:
+        - 9092:9092
+      environment:
+        - ZOOKEEPER_CONNECT=zookeeper:2181
+        - ALLOW_PLAINTEXT_LISTENER=yes
+        - KAFKA_LISTENERS=CONTROLLER://localhost:9091,HOST://:9092,SERVICE://kafka:9093
+        - KAFKA_ADVERTISED_LISTENERS=CONTROLLER://localhost:9091,HOST://localhost:9092,SERVICE://kafka:9093
+        - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP= CONTROLLER:PLAINTEXT,HOST:PLAINTEXT,SERVICE:PLAINTEXT
+        - KAFKA_INTER_BROKER_LISTENER_NAME=SERVICE
+      depends_on:
+        - zookeeper
+      networks:
+        - kraken-net 
+    connect:
+      image: quay.io/debezium/connect:3.0.8.Final
+      #image: quay.io/debezium/connect:1.9
+      container_name: connect
+      ports:
+        - 8083:8083
+      volumes:
+          #allow *.sql, *.sql.gz, or *.sh and is execute only if data directory is empty
+          - ./kafka/ojdbc8.jar:/kafka/libs/ojdbc8.jar
+          #- ./kafka/ojdbc11.jar:/kafka/libs/ojdbc11.jar
+          #- ./kafka/ojdbc17.jar:/kafka/libs/ojdbc17.jar
+
+          # - ./../kafka/ojdbc8.jar:/kafka/libs/ojdbc8.jar
+      environment:
+        - BOOTSTRAP_SERVERS=kafka:9093
+        - GROUP_ID=1
+        - CONFIG_STORAGE_TOPIC=my_connect_configs
+        - OFFSET_STORAGE_TOPIC=my_connect_offsets
+        - STATUS_STORAGE_TOPIC=my_connect_statuses
+      depends_on:
+        - zookeeper
+        - kafka
+        #- oracle21xe-composite
+        #- dbz_oracle21
+      networks:
+        - kraken-net 
+##########
+####
+############
+    kafka-ui:
+        image: provectuslabs/kafka-ui:latest
+        depends_on:
+          - kafka
+        ports:
+          - "8080:8080"
+        environment:
+          KAFKA_CLUSTERS_0_NAME: local
+          KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9093
+          KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+        networks:
+          - kraken-net 
+###############
+networks:
+    kraken-net:
+        name: kraken-net
+        driver: bridge

@@ -1,0 +1,148 @@
+{
+  "version": 3,
+  "name": "second",
+  "port": 8090,
+  "debug_endpoint": true,  
+  "@comment": "At this second stage of the implementation,we implement route with Authorization header but we still need to send to valid auth2 to the backend.",
+  "extra_config": {
+    "telemetry/logging": {
+      "level": "DEBUG",
+      "prefix": "[KRAKEND]",
+      "syslog": false,
+      "stdout": true
+    }
+  },
+  "output_encoding": "json",
+  "endpoints": [
+    {
+      "endpoint": "/public",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/public",
+          "encoding": "json",
+          "method": "GET",
+          "host": ["http://192.168.1.34:9080"]
+        }
+      ]
+    },
+    {
+      "endpoint": "/private",
+      "method": "GET",
+      "output_encoding": "json",
+      "timeout": "12000ms",
+      "backend": [
+        {
+          "url_pattern": "/api/private",
+          "encoding": "json",
+          "method": "GET",
+          "timeout": "12000ms",
+          "host": ["http://192.168.1.34:9080"]
+        }
+      ],
+      "input_headers": ["Authorization"]
+    },
+     {
+      "endpoint": "/privatefilter",
+      "method": "POST",
+      "output_encoding": "no-op",
+      "timeout": "12000ms",
+      "backend": [
+        {
+          "url_pattern": "/api/privatefilter",
+          "encoding": "no-op",
+          "sd": "static",
+          "method": "POST",
+          "timeout": "12000ms",
+          "host": ["http://192.168.1.34:9080"]
+        }
+      ],
+      "input_headers": ["Authorization","Content-Type"],
+        "extra_config": {
+            "auth/validator": {
+                "alg": "RS256",
+                "jwk_url": "http://keycloak_web:8080/realms/company-services/protocol/openid-connect/certs",
+                "roles_key":"resource_access.sample-service.roles",
+                "roles": ["USER"],
+                "roles_key_is_nested": true,
+                "disable_jwk_security": true,
+                "operation_debug": true,
+                "cache" : true
+             }
+         }
+      
+    },
+    {
+      "endpoint": "/privateno-sec/{principal}/{name}",
+      "method": "GET",
+      "output_encoding": "json",
+      "@comment": " call second service no-sec two params.",
+      "backend": [
+        {
+          "url_pattern": "/api/private/{principal}/{name}",
+          "encoding": "json",
+          "method": "GET",
+          "host": ["http://sample-nosec-service:9081"]
+        }
+      ]
+    },    
+    {
+      "endpoint": "/roles-adapter",
+      "method": "GET",
+      "output_encoding": "json",
+      "timeout": "12000ms",
+      "backend": [
+        {
+          "url_pattern": "/roles",
+          "timeout": "12000ms",
+          "encoding": "json",
+          "method": "GET",
+          "host": ["http://keycloack-adapter:8092"]
+        }
+      ],
+      "input_headers": ["Authorization"]
+    },
+    {
+      "endpoint": "/login-adapter",
+      "method": "POST",
+      "output_encoding": "json",
+      "input_headers": [ "Content-Type" ],
+      "content_type": "application/x-www-form-urlencoded",  
+      "backend": [
+        {
+          "url_pattern": "/login",
+          "encoding": "json",
+          "method": "POST",
+          "host": ["http://keycloack-adapter:8092"]
+        }
+      ]
+    },     
+    {
+    "endpoint": "/keycloak-healt",
+    "backend": [
+        {
+          "host":["http://keycloak_web:8080"],
+          "url_pattern": "/health/ready"
+        }
+        ]
+    }, 
+    {
+      "endpoint": "/keycloak-login",
+      "method": "POST",
+      "output_encoding": "json",
+      "input_headers": [ "Content-Type" ],
+      "content_type": "application/x-www-form-urlencoded",  
+      
+      "backend": [
+         {
+          "url_pattern": "/realms/company-services/protocol/openid-connect/token",
+          "encoding": "json",    
+          "method": "POST",
+          "host": ["http://keycloak_web:8080"]
+         }
+       ]
+     }
+     
+  ]
+}

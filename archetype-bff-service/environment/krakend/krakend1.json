@@ -1,0 +1,30 @@
+{
+  "version": 3,
+  "port": 8090,
+  "debug_endpoint": true,
+  "name": "first one",
+  "@comment": "At this early stage of the implementation, we still need to send to valid auth2 to the backend.",
+  "extra_config": {
+    "telemetry/logging": {
+      "level": "DEBUG",
+      "prefix": "[KRAKEND]",
+      "syslog": false,
+      "stdout": true
+    }
+  },  
+  "endpoints": [
+    {
+      "endpoint": "/public",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/public",
+          "encoding": "json",
+          "method": "GET",
+          "host": ["http://sample-service:9080"]
+        }
+      ]
+    }
+  ]
+}

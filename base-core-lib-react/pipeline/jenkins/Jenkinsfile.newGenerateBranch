@@ -1,0 +1,17 @@
+@Library("ocp-devops-java-library-new") _
+
+/**
+ * Invocación a la Shared Library de generación de ramas BUMP, RELEASE ó HOTFIX
+ * projectName       --> Nombre del Proyecto
+ * srvName           --> Nombre del Servicio
+ * projectKeyRepository --> Proyecto bitbucket donde se encuentra el repositorio de fuentes
+ * projectRepository --> Nombre del repositorio de bitbucket donde se encuentran el código fuente
+ * Generará una PR en bitbucket indicando la rama origen y destino
+ */
+
+ocpGenerateBumpReleaseHotfixPipeline {
+  projectName   = "commons-librarys"
+  srvName       = "nsp-base-core-lib"
+  projectKeyRepository = "OCP-COMMONS-LIBRARYS"
+  projectRepository = "nsp-base-core-lib"
+}

@@ -1,0 +1,86 @@
+version: '3.8'
+services:
+##########################################################################     
+#jaeger service
+##########################################################################
+  jaeger:
+    container_name: jaeger
+    image: "jaegertracing/all-in-one:latest" ##1.125
+    restart: always
+    ports:
+        - "16686:16686"
+        - "14268:14268"
+        - "14250:14250"
+        - "4326:4318" 
+        - "4325:4317" 
+        #- "4318" 
+        #- "4317" 
+    environment:
+        - COLLECTOR_OTLP_ENABLED=true
+    networks:
+        - kraken-net
+  otel-collector:
+    container_name: otel-collector
+    image: otel/opentelemetry-collector:latest
+    #image: otel/opentelemetry-collector-contrib:0.2.10 #0.109.0
+    restart: always
+    command: [ "--config=/etc/otelcol-contrib/otel-collector-config.yaml" ]
+    volumes:
+        #- ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:Z
+        - ./collector/otel-collector-config.yaml:/etc/otelcol-contrib/otel-collector-config.yaml:Z
+    ports:
+        #- "13133:13133" 
+        - "4317:4317" #OTLP gRPC receiver  
+        - "4318:4318" #OTLP http receiver
+        #- "1888:1888" # pprof extension
+        - "8888:8888" # Prometheus metrics exposed by the Collector
+        - "8889:8889" # Prometheus exporter metrics
+        #- "13133:13133" # health_check extension
+        #- "4317" # OTLP gRPC receiver
+        #- "4318" # OTLP http receiver
+        #- "55679:55679" # zpages extension              
+    depends_on:
+        - jaeger
+        #- zipkin-all-in-one
+        #- prometheus
+    networks:
+        - kraken-net 
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    volumes:
+        - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+        - --config.file=/etc/prometheus/prometheus.yml
+        #- --enable-feature=exemplar-storage
+        #- --web.enable-remote-write-receiver
+    restart: always
+    #extra_host:
+        #- host.docker.internal:host-gateway
+    ports:
+        - '9090:9090'
+    networks:
+     - kraken-net
+    depends_on:
+     - otel-collector
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    volumes:
+      - ./grafana/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    restart: always
+    ports:
+     - "3000:3000"
+    networks:
+     - kraken-net  
+    depends_on:
+     - prometheus
+     #- loki
+     #- jaeger
+     #- tempo
+
+networks:
+    kraken-net:
+        name: kraken-net
+        driver: bridge

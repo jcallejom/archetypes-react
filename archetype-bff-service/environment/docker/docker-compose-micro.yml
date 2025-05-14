@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+##########################################################################     
+#ocp-nsp-sorteo-service
+##########################################################################  
+  prototype-service:
+    container_name: prototype-service
+    build:
+        dockerfile: Dockerfile
+        context: ./../../
+    #image: sorteo/ocp-nsp-sorteo:1.0.0
+    environment:
+       - JAVA_OPTS=
+         -Xms256M 
+         -Xmx256M
+       - KEYCLOAK_HOST=keycloak_web
+       - KEYCLOAK_PORT=8080
+       - OTEL_SERVICE_NAME='archetype-api-composite'
+       - OTEL_EXPORTER_OTLP_ENDPOINT='http://collector:4318'
+         #-ALLOWED_ORIGINS = http://krakend:8080
+         #-Dspring.profiles.active=docker
+        #http://host.docker.internal:8088
+    ports:
+    - 8080:8080
+    networks:
+    - kraken-net
+
+##########################################################################     
+#keycloack-adapter-service
+##########################################################################  
+  keycloack-adapter-service:
+        container_name: keycloack-adapter-service
+        image: keycloackadapter-keycloack-adapter-service:latest
+        environment:
+          - JAVA_OPTS=
+             -Xms256M 
+             -Xmx256M
+          - KEYCLOACK_SERVER=http://keycloak_web:8080/realms/
+          - KEYCLOACK_REALM=prototype-services
+          - KEYCLOACK_REAL_ID=bt2zarcZQl1d0nk64XSlTg9N40sNczIYY3ky3YaIgtU
+          - KEYCLOACK_SECRET=FNXOP08GziiCMysAE0ST6D05Slw1zIbw
+          - KEYCLOACK_CLIENT=bff-service
+          #-Dspring.profiles.active=docker
+
+        ports:
+         - 8092:8092    
+        networks:
+         - kraken-net
+networks:
+    kraken-net:
+        name: kraken-net
+        driver: bridge

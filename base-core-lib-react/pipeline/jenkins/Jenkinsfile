@@ -1,0 +1,39 @@
+@Library("ocp-devops-java-library-new") _
+
+/**
+ * Realiza una construcción del código y posteriormente invocará la subida del componente Java al repositorio de artefactos
+ *
+ * Para funcionar correctamente espera los siguientes parámetros:
+ *
+ * projectName       --> Nombre del Proyecto
+ * srvName           --> Nombre del Servicio
+ * vm               --> Máquina virtual utilizada para la generación del componente (Ver VMs disponibles en JenkinsSharedLibraries/resources/vm)
+ * projectKeyRepository --> Proyecto bitbucket donde se encuentra el repositorio de fuentes. BITBUCKET
+ * projectRepository --> Nombre del repositorio donde se encuentran el código fuente. BITBUCKET
+ * mvnSettings       --> settings.xml a utilizar. Dejar en blanco si no se utiliza ninguna especial. Este fichero se encuentra en el repositorio app-k8s-juegosonce
+ * JAVA_TOOL_OPTIONS --> [OPTATIVO] Opciones que se deseen pasar a la máquina virtual de Java para las fases. Por defecto se cargan con -Duser.language=es -Duser.country=ES -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
+ * MAVEN_OPTS		 --> [OPTATIVO] Opciones que se deseen pasar a maven para las fases. Por defecto se cargan con -Duser.language=es -Duser.country=ES -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
+ * typeExtraTests    --> Tipo de tests a pasar a parte del standar. [clover]
+ * isTestsAnalized   --> Indicar si pasar o no los tests unitarios
+ * isSonarAnalized    --> Para indicar si pasar la fase de Sonar
+ * isStaticCodeAnalized --> Para indicar si pasar la fase de Análisis de código estatico (findbugs, spotbugs, checkstyle)
+ * isOwaspAnalized    --> Para indicar si pasar la fase de OWASP
+ * isReleaseAnalized --> Para indicar si pasar las fases de Sonar/OWASP/Trivy cuando se genera una release aunque estén a false sus flags
+ */
+
+
+ocpGenerateJavaComponentPipeline {
+  projectName          = "commons-librarys"
+  srvName              = "nsp-base-core-lib"
+  vm                   = "openjdk-18"
+  projectKeyRepository = "OCP-COMMONS-LIBRARYS"
+  projectRepository    = "nsp-base-core-lib"
+  mvnSettings          = "mvn-settings.xml"
+  isTestsAnalized      = false
+  isStaticCodeAnalized = false
+  isSonarAnalized      = false
+  isOwaspAnalized      = false
+  isReleaseAnalized    = true
+  extraBuildParameters = "-U"
+ 
+}

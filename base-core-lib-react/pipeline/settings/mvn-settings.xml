@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- | Fichero de configuración de Maven para Plataforma OCP | -->
+
+<settings
+		xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd"
+		xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<servers>
+		<server>
+			<id>commons-librarys-repository</id>
+			<username>commons_librarys_app</username>
+			<password>AP8A5D8YKrZ4dF4Tt211cz8E5xJ</password>
+		</server>
+		<server>
+			<id>commons-librarys-repository-snapshot</id>
+			<username>commons_librarys_app</username>
+			<password>AP8A5D8YKrZ4dF4Tt211cz8E5xJ</password>
+		</server>
+	</servers>
+
+	<mirrors>
+		<!-- mirror | Specifies a repository mirror site to use instead of a given
+			repository. | -->
+	</mirrors>
+
+	<profiles>
+		<profile>
+			<id>commons-librarys</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<!-- ******************************************************* -->
+			<!-- repositories for jar artifacts -->
+			<!-- ******************************************************* -->
+			<repositories>
+
+				<repository>
+					<id>commons-librarys-repository</id>
+					<name>commons-librarys-repository</name>
+					<url>https://jfrog-io.infra.ocp.once.org/artifactory/commons-librarys-mvn-release-virtual/
+					</url>
+				</repository>
+				<repository>
+					<id>commons-librarys-repository-snapshot</id>
+					<name>commons-librarys-repository-snapshot</name>
+					<url>https://jfrog-io.infra.ocp.once.org/artifactory/commons-librarys-mvn-snapshot-virtual/
+					</url>
+					<snapshots>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+					</snapshots>
+				</repository>
+
+
+			</repositories>
+
+		</profile>
+	</profiles>
+
+	<activeProfiles>
+		<activeProfile>commons-librarys</activeProfile>
+	</activeProfiles>
+
+
+</settings>

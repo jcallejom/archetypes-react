@@ -1,0 +1,30 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: '0.0.0.0:4318'
+exporters:
+  otlp/jaeger:
+    endpoint: "jaeger:4317"
+    tls:
+      insecure: true
+  prometheusremotewrite:
+    endpoint: "http://prometheus:9090/api/v1/write"
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    enable_open_metrics: true
+    #const_labels:
+     #     label1: value1  
+  debug:
+    verbosity: detailed
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      exporters: [debug,prometheus]
+    traces:
+      receivers: [otlp]
+      exporters: [debug,otlp/jaeger]
+    logs:
+      receivers: [otlp]
+      exporters: [debug]
