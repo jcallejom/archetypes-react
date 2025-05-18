@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: otel_java_agent
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+        - targets: ['otel-collector:8889']    
+  
+    honor_timestamps: true
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    #metrics_path: /metrics
+    #scheme: http
+    #static_configs:
+     # - targets:
+     #     - prototypebff-service:8080

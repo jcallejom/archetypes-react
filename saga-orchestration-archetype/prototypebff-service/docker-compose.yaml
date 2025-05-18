@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  prototypebff-service:
+    #build:
+        #context: .
+        #dockerfile: docker/Dockerfile
+    image: prototypebff-service:0.0.1-SNAPSHOT    
+    #container_name: prototypebff-service
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: 'http://collector:4318'  
+      OTEL_TRACES_EXPORTER: "jaeger"
+      OTEL_METRICS_EXPORTER: "prometheus"
+      OTEL_LOGS_EXPORTER: "logging"
+      #OTEL_SERVICE_NAME: "prototypebff-service"
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "http://otel-collector:4318/v1/traces"
+      OTEL_EXPORTER_OTLP_METRICS_ENDPOINT: "http://otel-collector:4318/v1/metrics"
+      OTEL_EXPORTER_OTLP_LOGS_ENDPOINT: "http://otel-collector:4318/v1/logs"
+      # Optional specify file configuration instead of using environment variable scheme
+      # To use, call "export OTEL_EXPERIMENTAL_CONFIG_FILE=/sdk-config.yaml" before calling docker compose up
+      OTEL_EXPERIMENTAL_CONFIG_FILE:
+    ports:
+      - "8080:8080"
+    networks:
+        - saga-net
+        #- "saga-orchestration-archetype_default"
+    volumes: #opcion cargar config en doker en lugar de java
+        - ./agent/sdk-config.yaml:/sdk-config.yaml   
+    
+networks:
+    saga-net:
+      name: saga-net
+      driver: bridge

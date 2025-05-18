@@ -1,26 +1,17 @@
 package com.archetype.architectural.order.config;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-
-import com.fasterxml.jackson.databind.util.Converter;
-
-import reactor.core.publisher.Mono;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -47,29 +38,7 @@ public class SecurityConfiguration {
 	}
 	    
 
-//	@Bean
-//	Converter<Jwt, Collection<GrantedAuthority>> keycloakGrantedAuthoritiesConverter(@Value("${jwt.auth.converter.resource-id}") String clientId) {
-//		return (Converter<Jwt, Collection<GrantedAuthority>>) new KeycloakGrantedAuthoritiesConverter(clientId);
-//	}
 
-//	@Bean
-//	Converter<Jwt, Mono<AbstractAuthenticationToken>> keycloakJwtAuthenticationConverter(Converter<Jwt, Collection<GrantedAuthority>> converter) {
-//		return (Converter<Jwt, Mono<AbstractAuthenticationToken>>) new ReactiveJwtAuthenticationTokenConverter(converter);
-//	}	
-//	@Bean
-//	SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter) {
-//		// @formatter:off
-//		http.authorizeExchange()
-//				.pathMatchers("/hello/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-//				.anyExchange().authenticated()
-//			.and()
-//			.oauth2ResourceServer()
-//				.jwt()
-//				.jwtAuthenticationConverter(jwtAuthenticationConverter);
-//		// @formatter:on
-//
-//		return http.build();
-//	}
 	
     @Bean
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) throws Exception {

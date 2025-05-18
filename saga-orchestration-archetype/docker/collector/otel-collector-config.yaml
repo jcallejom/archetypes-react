@@ -1,0 +1,47 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+       # endpoint: otel-collector:4318
+        endpoint: 0.0.0.0:4318
+exporters:
+  otlp:
+    endpoint: "jaeger:14250"
+    #endpoint: "jaeger:4318"
+    tls:
+      insecure: true
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    #enable_open_metrics: true
+    const_labels:
+        label1: value1
+  zipkin:
+    endpoint: http://zipkin:9411/api/v2/spans
+    format: proto
+  debug:
+    verbosity: detailed        
+processors:
+  batch:
+
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp,zipkin,debug]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp,debug]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp,prometheus,debug]

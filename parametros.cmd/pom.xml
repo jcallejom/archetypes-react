@@ -5,25 +5,57 @@
    
     <modelVersion>4.0.0</modelVersion>
  	<parent>
-			<groupId>com.archetype.architectural</groupId>
-			<artifactId>api-composite-react-parent</artifactId>
-	        <version>1.0.0-SNAPSHOT</version>
-	    </parent>
+          <groupId>com.archetype</groupId>
+          <artifactId>api-compossite-parent</artifactId>
+          <version>1.0.0-SNAPSHOT</version>
+    </parent>
     <artifactId>parametros.cmd</artifactId>
-
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.archetype</groupId>
+            <artifactId>api-compossite-parent</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.archetype.base.core</groupId>
+                    <artifactId>base-core-lib</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
     <dependencies>
         <dependency>
 			<groupId>com.archetype.architectural</groupId>
             <artifactId>common-rvo</artifactId>
              <version>1.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+              
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+        
+                </exclusion>
+            </exclusions>
+             
         </dependency>
-        <!-- Dependencia de jaeger web spring 2.7.x  
+       <!-- security -->
         <dependency>
-             <groupId>io.opentracing.contrib</groupId>
-             <artifactId>opentracing-spring-jaeger-web-starter</artifactId>
-         </dependency>
-         -->
-            <dependency>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+         <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency> 
+         <dependency>
+              <groupId>com.h2database</groupId>
+              <artifactId>h2</artifactId>
+              <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>

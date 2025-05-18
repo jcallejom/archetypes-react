@@ -1,5 +1,6 @@
 package com.archetype.architectural.dto.domainx;
 
+import com.archetype.architectural.dto.domainx.enums.CanalVenta;
 import com.archetype.architectural.dto.domainx.enums.TipoUsuario;
 
 import lombok.AllArgsConstructor;
@@ -11,11 +12,12 @@ import lombok.extern.jackson.Jacksonized;
 @AllArgsConstructor
 @Getter
 @Builder
-//@Jacksonized
+@Jacksonized
 public final class FindClientStatusQueryResponse {
     private final String messaje ;
     private final String cdClient;
     private final String cdTarj;
     private final TipoUsuario tipoUsuario;
     private final Boolean migracion;
+    private final CanalVenta canalVenta;
 }

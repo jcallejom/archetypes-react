@@ -7,11 +7,12 @@ import com.archetype.architectural.dto.domainx.enums.TipoParam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
 
 @AllArgsConstructor
 @Getter
 @Builder
-//@Jacksonized
+@Jacksonized
 public final class FindParamQueryResponse {
     private final String cdTipoParam ;
     private final String dsParam;

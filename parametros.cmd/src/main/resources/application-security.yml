@@ -1,0 +1,18 @@
+#http://keycloak-IP:Port/auth/realms/XXX
+spring.security.oauth2.resourceserver.jwt.issuer-uri: http://${KEYCLOAK_HOST:localhost}:${KEYCLOAK_PORT:8088}/realms/prototype-services
+#spring.security.oauth2.resourceserver.jwt.issuer-uri: http://keycloak_web:8080/realms/prototype-services                
+jwt.auth.converter.resource-id: bff-service
+#jwt.auth.converter.resource-id: ${spring.application.name}
+jwt.auth.converter.principal-attribute: preferred_username
+###
+management:
+  endpoints:
+    web:
+      cors:
+        #allowed-origins: ${ALLOWED_ORIGINS:http://localhost:4200}
+        allowed-origins: ${ALLOWED_ORIGINS:*}
+        allowed-methods: ${ALLOWED_METHODS:*}
+        allowed-headers: ${ALLOWED_HEADERS:*}
+        exposed-headers: ${EXPOSED_HEADERS:Authorization,Link,X-Total-Count,Content-Disposition}
+        allow-credentials: ${ALLOW_CREDENTIALS:false}
+        max-age: ${MAX_AGE:1800}

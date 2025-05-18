@@ -1,7 +1,7 @@
 .sonarlint
 .metadata
 .git
-saga-orchestration-archetype/
+portainer_data
 oracle_data_api/
 cloudbeaver_data/
 postgres_data_k/

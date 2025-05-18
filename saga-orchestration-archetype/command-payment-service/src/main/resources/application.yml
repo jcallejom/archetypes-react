@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: command-payment-service
+server:
+    port: 8082
+    
+#tracing:
+    #url: http://localhost:4318/v1/traces
+
+management:
+ tracing:
+    sampling:
+      probability: 1.0
+ #zipkin:
+  #  tracing:
+   #   endpoint: http://localhost:4317
+ otlp:
+   tracing:
+    #endpoint: http://localhost:4317
+    endpoint: http://localhost:4318
+   metrics:
+    export:
+        url: http://localhost:4318
+    
+logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'          
+        ######old jaeger######
+        #opentracing:
+          #jaeger:
+            #http-sender:
+              #url: http://localhost:14268/api/traces
+              #url: http://${JAEGER_HOST:localhost}:14268/api/traces
+            #enable-b3-propagation: true
+        ######old jaeger######    

@@ -1,12 +1,58 @@
-spring:
-  application:
-    name: command-inventory-service
 server:
     port: 8081
+spring:
+  application:
+    name: parametros.cmd
+  profiles:
+    active: security
+  config:
+    import: "classpath:/application-security.yml"    
+########################
+  jpa:
+      show-sql: true
+      defer-datasource-initialization: true
+      #Spring Boot 3.1 upgrades to Hibernate 6.2, so upgrading SB to 3.1.x fixes strategy = GenerationType.AUTO      
+      properties:
+        hibernate:
+           dialect: org.hibernate.dialect.H2Dialect
+           hql.bulk_id_strategy.global_temporary.create_tables: false
+           hql.bulk_id_strategy.global_temporary.drop_tables: false      
+      hibernate:
+        ddl-auto: update
+#        default_schema: oracleuser
+      #properties.hibernate.default_schema: oracleuser
+      #database-platform: org.hibernate.dialect.PostgreSQLDialect
+      #spring.datasource.hikari.schema=schema
+  datasource:
+      #url: jdbc:h2:mem:test_db;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS oracleuser
+      #url: jdbc:h2:mem:test_db;MODE=ORACLE;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS oracleuser
+      #url: jdbc:h2:mem:test_db;MODE=ORACLE;DB_CLOSE_DELAY=-1;
+      url: jdbc:h2:mem:test_db;MODE=ORACLE;DB_CLOSE_ON_EXIT=FALSE;
+      driverClassName: org.h2.Driver
+      username: sa
+      password: password
+  sql:
+   init:
+     mode: always
+     continue-on-error: true
+     #schema-locations: oracleuser
+     #data-locations: classpath:db/data.sql
 #tracing:
  #   url: http://localhost:4318/v1/traces
 
 management:
+  endpoints:
+    web:
+      #base-path: /ocp-nsp-sorteo
+      exposure:
+        #include: '*'
+        include: health, metrics , prometheus
+  endpoint:
+    health:
+      show-details: ALWAYS
+  metrics:
+   tags:
+    application: ${spring.application.name}  
   tracing:
     sampling:
       probability: 1.0
@@ -22,7 +68,13 @@ management:
         url: http://localhost:4318
 logging:
   pattern:
-    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'          
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]' 
+  level:
+    #root: INFO
+    org:
+      springframework: ${LOG:DEBUG}
+      security: ${SEC_LOG:DEBUG}
+       
     ######old jaeger######
     #opentracing:
       #jaeger:

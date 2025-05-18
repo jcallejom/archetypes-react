@@ -1,0 +1,118 @@
+server:
+  port: 8080
+spring:
+  #autoconfigure:
+      #exclude: org.springframework.boot.actuate.autoconfigure.tracing.OpenTelemetryAutoConfiguration, org.springframework.boot.actuate.autoconfigure.tracing.BraveAutoConfiguration
+      #exclude: org.springframework.boot.actuate.autoconfigure.tracing.OpenTelemetryAutoConfiguration, org.springframework.boot.actuate.autoconfigure.tracing.BraveAutoConfiguration
+
+  application:
+    name: prototypebff-service
+  #kafka:
+    #template:
+      #observation-enabled: true
+  cloud:
+    function:
+      #definition: supplier;consumer
+      definition: ordersupplier;orderconsumer
+    stream:
+      #function:
+        #definition: supplier;consumer
+        #definition: ordersupplier;orderconsumer
+        #definition: sink;flux
+      bindings:
+        ordersupplier-out-0:
+          destination: order-created
+        orderconsumer-in-0:
+          destination: order-updated
+      kafka:
+        binder:
+          brokers: ${KAFKA_HOST:localhost}:9092
+          auto-create-topics: true
+          enable-observation: true
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+      data-locations: classpath:schema.sql
+
+  r2dbc:
+    #url: r2dbc:postgresql://localhost:3432/re2dbc_db
+    url: r2dbc:postgresql://${DB_HOST:localhost:3432}/re2dbc_db
+    #url: r2dbc:h2:mem:///fluxr2dbc
+    username: postgres
+    password: postgrespw
+    
+  jpa:
+   defer-datasource-initialization: true
+  #  show-sql: true
+   # hibernate:
+   #   ddl-auto: update
+   # database-platform: org.hibernate.dialect.H2Dialect
+  #datasource:
+   #     url: r2dbc:h2:mem:fluxr2dbc
+   #     username: admin
+   #     password: adminpw
+   #     driver-class-name: org.h2.Driver
+  h2:
+   console:
+     enabled: true
+     #path: /h2-console
+     #port: 8089
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    path: /swagger-ui # swagger custom path
+    enabled: true  # Disabling the swagger-ui production enviroments always false
+    use-root-path: true
+  api-docs:
+    groups:
+      enabled: true
+
+#tracing:
+  #url: http://localhost:4318/v1/traces
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoints:
+    web:
+      #base-path: /ocp-nsp-sorteo
+      exposure:
+       include: '*'
+       #include: health, metrics, prometheus
+  endpoint:
+    health:
+      show-details: ALWAYS
+  metrics:
+    tags:
+      application: ${spring.application.name}   
+  #zipkin:
+    #tracing:
+      #endpoint: http://localhost:4317 
+     # endpoint: http://zipkin:9411/api/v2/spans   
+  otlp:
+    tracing:
+      #endpoint: http://localhost:4317
+      endpoint: http://localhost:4318
+      #endpoint: http://localhost:4318
+    metrics:
+      export:
+        #url: http://localhost:4317 
+        url: http://localhost:4318
+        #url: http://localhost:4318
+        step: 10s
+logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+  level:
+    org:
+     springframework: ${LOG:DEBUG}       
+######old jaeger######
+#opentracing:
+  #jaeger:
+    #http-sender:
+      #url: http://localhost:14268/api/traces
+      #url: http://${JAEGER_HOST:localhost}:14268/api/traces
+    #enable-b3-propagation: true
+######old jaeger######    

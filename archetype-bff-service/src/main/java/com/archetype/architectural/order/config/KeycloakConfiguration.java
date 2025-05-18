@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 public class KeycloakConfiguration {
 
 	@Bean
-	Converter<Jwt, Collection<GrantedAuthority>> keycloakGrantedAuthoritiesConverter(@Value("${app.security.clientId}") String clientId) {
+	Converter<Jwt, Collection<GrantedAuthority>> keycloakGrantedAuthoritiesConverter(@Value("${jwt.auth.converter.resource-id}") String clientId) {
 		return new KeycloakGrantedAuthoritiesConverter(clientId);
 	}
 

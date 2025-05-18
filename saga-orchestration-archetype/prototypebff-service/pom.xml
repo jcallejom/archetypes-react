@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+		<groupId>com.archetype.architectural</groupId>
+		<artifactId>saga-orchestration-archetype</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>prototypebff-service</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>r2dbc-postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>        
+        
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <!-- para consola h2 r2dbc, ademas necesitamos actuators -->
+        <dependency>
+            <groupId>me.yaman.can</groupId>
+            <artifactId>spring-boot-webflux-h2-console</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+   <!--
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency> --> 
+        <dependency>
+			<groupId>com.archetype.architectural</groupId>
+            <artifactId>common-vo</artifactId>
+        </dependency>
+        <!-- dependencia boot 2.7.x
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-webflux-ui</artifactId>
+                <version>1.8.0</version>
+            </dependency>-->
+                  <!-- dependencia boot 3.1.x-->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+                <version>2.6.0</version>
+            </dependency>
+    <!-- Dependencia de jaeger cloud spring 2.7.x     
+         <dependency>
+             <groupId>io.opentracing.contrib</groupId>
+             <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
+         </dependency>          
+         --> 
+    </dependencies>
+
+</project>

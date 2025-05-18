@@ -12,8 +12,23 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebClientConfig {
-
-    @Bean
+	
+//	@Bean
+//	public TokenHolder tokenHolder() {
+//	    return new TokenHolder();
+//	}
+//    
+//	@Bean
+//	public TokenInterceptor tokenInterceptor(TokenHolder tokenHolder) {
+//	        return new TokenInterceptor(tokenHolder);
+//	}
+	
+	//sin holder
+	@Bean
+	public TokenInterceptor tokenInterceptor() {
+	        return new TokenInterceptor();
+	}
+	@Bean
     @Qualifier("parametros")
     public WebClient parameterClient(@Value("${service.endpoints.parametros}") String endpoint){
         return WebClient.builder()
@@ -22,12 +37,22 @@ public class WebClientConfig {
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
-
+	@Bean
+    @Qualifier("parametrostoken")
+    public WebClient parameterClientToken(@Value("${service.endpoints.parametros}") String endpoint,TokenInterceptor tokenInterceptor){
+        return WebClient.builder()
+                .baseUrl(endpoint)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .filter(tokenInterceptor)
+                .build();
+    }
     @Bean
     @Qualifier("clientes")
     public WebClient clientClient(@Value("${service.endpoints.clientes}") String endpoint){
         return WebClient.builder()
                 .baseUrl(endpoint)
+//                .header(HttpHeaders.AUTHORIZATION, accessToken)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();

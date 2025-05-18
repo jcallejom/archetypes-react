@@ -131,5 +131,6 @@ logging:
 service:
   endpoints:
     parametros: http://localhost:8081
-    clientes: http://localhost:8082 
-    reservas: http://localhost:8083   
+    clientes: http://localhost:8082
+    reservas: http://localhost:3001
+   # reservas: http://localhost:8083   
