@@ -1,4 +1,4 @@
-package com.archetype.architectural.saga.service;
+package com.archetype.architectural.saga.core;
 
 import reactor.core.publisher.Mono;
 

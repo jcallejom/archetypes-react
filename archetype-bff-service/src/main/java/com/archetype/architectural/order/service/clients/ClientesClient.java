@@ -38,14 +38,10 @@ public class ClientesClient {
 		.accept(MediaType.APPLICATION_JSON)
 		.retrieve()
 //		.onStatus(h->h.is4xxClientError(), t->{
-		.onStatus(h->h.isSameCodeAs(HttpStatus.NOT_FOUND), t->{
-	 
-			log.debug("no se ha encontrado cliente {}",query.getNumeroDocumento());
-//			return Mono.empty();
-//			return Mono.just(FindClientByDniQueryResponse.builder().build());//esto no va a funcionar ¿porque? porque tiene que ser un trownable
-			return 	Mono.error(new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND));
-
-		})//el do error entra con el retry 
+//		.onStatus(h->h.isSameCodeAs(HttpStatus.NOT_FOUND), t->{
+//			log.error("No se ha encontrado cliente {}",query.getNumeroDocumento());
+//			return 	Mono.error(new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND));
+//		})//el do error entra con el retry 
 		.bodyToMono(FindClientByDniQueryResponse.class)
 //		.toEntity(FindClientByDniQueryResponse.class)//Mono<ResponseEntity<FindClientByDniQueryResponse>
 //		.timeout(Duration.ofSeconds(5));//se puede introducir un tiempo de espera acabado el cual lanza error
@@ -59,18 +55,19 @@ public class ClientesClient {
 				}
 				))//se usa cuando se acuerda en los flujos devolver Mono/flux !!!vacios!!!
 //		.block;
-		.doOnTerminate(() -> log.debug("clientes TomaToma: {}" ))//mas apropiado para altas y actualizaciones
-		.doOnSuccess(cf -> log.debug("clientes TomaToma: {}",cf ))//mas apropiado para consultas
+//		.doOnTerminate(() -> log.debug("clientes terminate: {}" ))//mas apropiado para altas y actualizaciones
+		.doOnSuccess(cf -> log.debug("clientes success: {}",cf ))//mas apropiado para consultas
 
-		//		.onErrorResume(ex -> Mono.empty())// hazcer cualquier otra cosa
 //		.onErrorReturn(ex ->  new TechnicalRuntimeException(null,ex))
 		.doOnError(e ->
 			{
-				log.error("clientes error",e);
-				throw new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND,e);
+				log.error("clientes doOnError",e);
+				Mono.error(new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND));
+//				throw new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND,e);
 			})
-		.retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(1)));//reinrenta3 en intervalo s de 2 seg
-//	    .retry(3);
+		//.onErrorResume(ex -> Mono.empty())// hazcer cualquier otra cosa
+//		.retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(1)));//reinrenta3 en intervalo s de 2 seg
+	    .retry(2);
     }
     
 //	monoFind.subscribe(p->System.out.println(p));

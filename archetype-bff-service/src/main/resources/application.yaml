@@ -18,17 +18,18 @@ spring:
   cloud:
     function:
       #definition: supplier;consumer
-      definition: ordersupplier;orderconsumer
+      definition: ordersupplier;orderconsumer;orderclientsupplier;orderclientconsumer;
     stream:
-      #function:
-        #definition: supplier;consumer
-        #definition: ordersupplier;orderconsumer
-        #definition: sink;flux
       bindings:
         ordersupplier-out-0:
           destination: order-created
         orderconsumer-in-0:
           destination: order-updated
+##########
+        orderclientsupplier-out-0:
+          destination: order-client-created
+        orderclientconsumer-in-0:
+          destination: order-client-updated          
       kafka:
         binder:
           brokers: ${KAFKA_HOST:localhost}:9092

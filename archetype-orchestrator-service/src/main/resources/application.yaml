@@ -10,7 +10,7 @@ spring:
   cloud:
     function:
       #definition: supplier;consumer
-      definition: processor   
+      definition: processor;processorclient  
     stream:
       #function:
         #definition: processor
@@ -19,6 +19,11 @@ spring:
           destination: order-created
         processor-out-0:
           destination: order-updated
+###########
+        processorclient-in-0:
+          destination: order-client-created
+        processorclient-out-0:
+          destination: order-client-updated          
       kafka:
         binder:
           replication-factor: 1
@@ -29,6 +34,8 @@ service:
   endpoints:
     inventory: http://localhost:8081
     payment: http://localhost:8082
+    keycloack: http://localhost:8092
+    clientes: http://localhost:8082
 
 #tracing:
   #url: http://localhost:4318/v1/traces

@@ -6,8 +6,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.archetype.architectural.dto.PaymentCommandRequest;
 import com.archetype.architectural.dto.PaymentCommandResponse;
 import com.archetype.architectural.enums.PaymentStatus;
-import com.archetype.architectural.saga.service.WorkflowStep;
-import com.archetype.architectural.saga.service.WorkflowStepStatus;
+import com.archetype.architectural.saga.core.WorkflowStep;
+import com.archetype.architectural.saga.core.WorkflowStepStatus;
 
 import reactor.core.publisher.Mono;
 

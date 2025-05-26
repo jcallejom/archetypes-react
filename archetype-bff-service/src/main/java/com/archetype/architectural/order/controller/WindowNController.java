@@ -3,21 +3,27 @@ package com.archetype.architectural.order.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.archetype.architectural.dto.CreateOrderRequest;
+import com.archetype.architectural.dto.CreateOrderResponse;
 import com.archetype.architectural.dto.domainx.FindByCdtarjQuery;
 import com.archetype.architectural.dto.domainx.FindClientStatusAggregateResponse;
 import com.archetype.architectural.dto.domainx.FindClientStatusQuery;
 import com.archetype.architectural.dto.domainx.FindClientStatusQueryResponse;
+import com.archetype.architectural.order.entity.PurchaseOrder;
+import com.archetype.architectural.order.service.OrderService;
 import com.archetype.architectural.order.service.WindowNService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -50,4 +56,7 @@ public class WindowNController {
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
+    
+
+
 }

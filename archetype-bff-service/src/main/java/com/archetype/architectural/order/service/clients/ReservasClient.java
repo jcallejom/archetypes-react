@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.archetype.architectural.dto.domainx.FindReservaQueryResponse;
+import com.archetype.base.core.exception.TechnicalRuntimeException;
+import com.archetype.base.core.exception.model.GenericError;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -33,8 +35,8 @@ public class ReservasClient {
 //		.subscribe(mf ->log.debug("reservas: {}",mf ) )
 		.doOnTerminate(() -> log.debug("reservas: {}" ))//mas apropiado para altas y actualizaciones junto con.block()
 		.doOnError(e -> log.error("reservas error",e) )
-		
-		.onErrorResume(ex -> Mono.empty())
+		.onErrorResume(ex ->Mono.error(new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND)))
+//		.onErrorResume(ex -> Mono.empty())
 	    .retry(3)//block y retry no se llevan
 	    ;
 
