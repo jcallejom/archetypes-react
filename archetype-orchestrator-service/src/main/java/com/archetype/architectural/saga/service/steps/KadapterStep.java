@@ -35,7 +35,7 @@ public class KadapterStep implements WorkflowStep {
     public Mono<Boolean> process() {
         return this.webClient
                     .post()
-                    .uri("/createUser")
+                    .uri("/createuser")
                     .body(BodyInserters.fromValue(this.request))
                     .retrieve()
                     .bodyToMono(CreateUserResponse.class)

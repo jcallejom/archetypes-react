@@ -35,7 +35,7 @@ public class ParametrosClient {
 			.doOnTerminate(() -> log.debug("parametro: {}" ))//mas apropiado para altas y actualizaciones
 			.doOnError(e -> log.error("param error",e) )
 //			.onErrorResume(ex -> Mono.empty())
-			.onErrorResume(ex ->Mono.error(new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND)))
+			.onErrorResume(ex ->Mono.error(new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND,ex)))
 		    .retry(3);
 
 

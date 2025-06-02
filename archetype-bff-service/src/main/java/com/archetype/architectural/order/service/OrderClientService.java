@@ -29,10 +29,11 @@ public class OrderClientService {
 
     public Mono<ClientOrder> createNewClientOrder(CreateClientOrderRequest createOrderRequest){
         return this.clientOrderRepository.save(this.dtoToEntity(createOrderRequest))
-                .doOnNext(e ->  clone(createOrderRequest ,e.getId()))
+//                .doOnNext(e ->  clone(createOrderRequest ,e.getId()))
+        		.doOnNext(e ->  createOrderRequest.setOrderId(e.getId()))
                 .doOnNext(e -> this.emitEvent(createOrderRequest));
 //                .doOnError( (Consumer<? super Throwable>) new RuntimeException("error controlado"));
-//                .onErrorReturn(null)
+//                .onErrorReturn(null);
     }
 
     public Flux<CreateClientOrderResponse> getAll() {

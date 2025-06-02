@@ -32,10 +32,11 @@ spring:
 ######
 service:
   endpoints:
-    inventory: http://localhost:8081
-    payment: http://localhost:8082
+    inventory: http://localhost:8071
+    payment: http://localhost:8072
     keycloack: http://localhost:8092
     clientes: http://localhost:8082
+    
 
 #tracing:
   #url: http://localhost:4318/v1/traces

@@ -35,7 +35,7 @@ public class ReservasClient {
 //		.subscribe(mf ->log.debug("reservas: {}",mf ) )
 		.doOnTerminate(() -> log.debug("reservas: {}" ))//mas apropiado para altas y actualizaciones junto con.block()
 		.doOnError(e -> log.error("reservas error",e) )
-		.onErrorResume(ex ->Mono.error(new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND)))
+		.onErrorResume(ex ->Mono.error(new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND,ex)))
 //		.onErrorResume(ex -> Mono.empty())
 	    .retry(3)//block y retry no se llevan
 	    ;

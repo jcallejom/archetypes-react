@@ -62,7 +62,7 @@ public class ClientesClient {
 		.doOnError(e ->
 			{
 				log.error("clientes doOnError",e);
-				Mono.error(new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND));
+				Mono.error(new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND,e));
 //				throw new TechnicalRuntimeException(GenericError.EXCEPTION_COM_ELEMENT_NOT_FOUND,e);
 			})
 		//.onErrorResume(ex -> Mono.empty())// hazcer cualquier otra cosa

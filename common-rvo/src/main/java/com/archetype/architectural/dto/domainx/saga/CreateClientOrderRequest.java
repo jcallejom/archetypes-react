@@ -10,11 +10,11 @@ import java.util.UUID;
 @Builder
 @Jacksonized
 public class CreateClientOrderRequest {
-    private final String clientId;
-    private final String name;
-    private final String surname;
-    private final String cdtarjcode;
-    private final UUID orderId;
+    private  String clientId;
+    private  String name;
+    private  String surname;
+    private  String cdtarjcode;
+    private  UUID orderId;
 //    private Integer userId;
 //    private Integer productId;
     

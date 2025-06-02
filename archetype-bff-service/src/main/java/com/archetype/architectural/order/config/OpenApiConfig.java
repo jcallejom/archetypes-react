@@ -17,7 +17,7 @@ public class OpenApiConfig {
 	     return new OpenAPI()
 	          .components(new Components())
 	          .info(new Info()
-	          .title("order API")
+	          .title("bff API")
 	          .version("1.0.0"))
 	          .components(new Components().addSecuritySchemes("bearer-key", 
           	  	  new SecurityScheme().type(SecurityScheme.Type.HTTP)

@@ -12,6 +12,9 @@ import com.archetype.architectural.dto.CreateOrderResponse;
 import com.archetype.architectural.order.entity.PurchaseOrder;
 import com.archetype.architectural.order.service.OrderService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -22,17 +25,17 @@ public class OrderController {
     @Autowired
     private OrderService service;
     
-//    @Operation(description = "Return all orders bundled into Response", summary ="Return 204 if no data content found")
-//    @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Exito"),
-//    @ApiResponse(responseCode = "500", description = "Internal error")})
+    @Operation(description = "Return create orders bundled into Response", summary ="Return 204 if no data content found")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Exito"),
+    @ApiResponse(responseCode = "500", description = "Internal error")})
     @PostMapping("/create")
     public Mono<PurchaseOrder> createOrder(@RequestBody Mono<CreateOrderRequest> mono){
         return mono
                 .flatMap(this.service::createOrder);
     }
-//    @Operation(description = "Return all orders bundled into Response", summary ="Return 204 if no data content found")
-//    @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Exito"),
-//    @ApiResponse(responseCode = "500", description = "Internal error")})
+    @Operation(description = "Return all orders bundled into Response", summary ="Return 204 if no data content found")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Exito"),
+    @ApiResponse(responseCode = "500", description = "Internal error")})
     @GetMapping("/all")
     public Flux<CreateOrderResponse> getOrders(){
         return this.service.getAll();

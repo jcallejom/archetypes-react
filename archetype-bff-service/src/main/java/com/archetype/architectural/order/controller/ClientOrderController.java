@@ -12,6 +12,9 @@ import com.archetype.architectural.dto.domainx.saga.CreateClientOrderResponse;
 import com.archetype.architectural.order.entity.ClientOrder;
 import com.archetype.architectural.order.service.OrderClientService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -22,17 +25,17 @@ public class ClientOrderController {
     @Autowired
     private OrderClientService service;
     
-//    @Operation(description = "Return all client orders bundled into Response", summary ="Return 204 if no data content found")
-//    @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Exito"),
-//    @ApiResponse(responseCode = "500", description = "Internal error")})
+    @Operation(description = "Return all client orders bundled into Response", summary ="Return 204 if no data content found")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Exito"),
+    @ApiResponse(responseCode = "500", description = "Internal error")})
     @PostMapping("/createclient")
     public Mono<ClientOrder> createNewClientOrder(@RequestBody Mono<CreateClientOrderRequest> mono){
         return mono
                 .flatMap(this.service::createNewClientOrder);
     }
-//    @Operation(description = "Return all orders bundled into Response", summary ="Return 204 if no data content found")
-//    @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Exito"),
-//    @ApiResponse(responseCode = "500", description = "Internal error")})
+    @Operation(description = "Return all orders bundled into Response", summary ="Return 204 if no data content found")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Exito"),
+    @ApiResponse(responseCode = "500", description = "Internal error")})
     @GetMapping("/allorderclients")
     public Flux<CreateClientOrderResponse> getOrders(){
         return this.service.getAll();
